@@ -1,5 +1,5 @@
-import { Grid } from '@mui/material';
-import React from 'react';
+import { StarOutline } from '@mui/icons-material';
+import { Grid, Typography } from '@mui/material';
 
 export const NothingSelectedView = () => {
   return (
@@ -9,9 +9,20 @@ export const NothingSelectedView = () => {
       direction='column'
       alignItems='center'
       justifyContent='center'
-      sx={{ minHeight: 'calc(100vh -110px)', backgroundColor: 'primary.main' }}
+      sx={{
+        minHeight: 'calc(100vh - 110px)',
+        backgroundColor: 'primary.main',
+        borderRadius: 3,
+      }}
     >
-      a
+      <Grid item xs={12}>
+        <StarOutline sx={{ fontSize: 100, color: '#fff' }} />
+      </Grid>
+      <Grid item xs={12}>
+        <Typography color='#fff' variant='h5'>
+          Selecciona o crea una entrada
+        </Typography>
+      </Grid>
     </Grid>
   );
 };
