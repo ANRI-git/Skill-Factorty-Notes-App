@@ -1,13 +1,23 @@
 import { AddOutlined } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
+import { CircularProgress, IconButton } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { startNewNote } from '../../store/notes/thunks';
 import { NotesLayout } from '../layout/NotesLayout';
 import { NothingSelectedView, NoteView } from '../views';
 
 export const NotesPage = () => {
+  const { isSaving, activeNote } = useSelector((state) => state.note);
+
+  const dispatch = useDispatch();
+
+  const onClickNewNote = () => {
+    if (isSaving) return;
+    dispatch(startNewNote());
+  };
+
   return (
     <NotesLayout>
-      <NothingSelectedView />
-      {/* <NoteView /> */}
+      {activeNote ? <NoteView /> : <NothingSelectedView />}
 
       <IconButton
         size='large'
@@ -19,8 +29,13 @@ export const NotesPage = () => {
           right: 50,
           bottom: 50,
         }}
+        onClick={onClickNewNote}
       >
-        <AddOutlined sx={{ fontSize: 30 }} />
+        {isSaving ? (
+          <CircularProgress size={30} color='secondary' />
+        ) : (
+          <AddOutlined sx={{ fontSize: 30 }} />
+        )}
       </IconButton>
     </NotesLayout>
   );

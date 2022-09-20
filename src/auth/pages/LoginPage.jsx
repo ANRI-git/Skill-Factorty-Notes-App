@@ -10,20 +10,22 @@ import {
 } from '../../store/auth/thunks';
 import { AuthLayout } from '../layout/AuthLayout';
 
+const initialForm = {
+  email: '',
+  password: '',
+};
+
 export const LoginPage = () => {
   const { status } = useSelector((state) => state.auth);
   const isChecking = useMemo(() => status === 'checking', [status]);
 
-  const { email, password, onInputChange } = useForm({
-    email: '',
-    password: '',
-  });
+  const { email, password, onInputChange } = useForm(initialForm);
 
   const dispatch = useDispatch();
 
   const onHandleSubmit = (event) => {
     event.preventDefault();
-    dispatch(startLoginWithEmailPassword({email, password}));
+    dispatch(startLoginWithEmailPassword({ email, password }));
   };
 
   const onGoogleSignIn = () => {
@@ -32,7 +34,10 @@ export const LoginPage = () => {
 
   return (
     <AuthLayout title='Login'>
-      <form onSubmit={onHandleSubmit}>
+      <form
+        onSubmit={onHandleSubmit}
+        className='animate__animated animate__fadeIn'
+      >
         <Grid item xs={12} sx={{ mt: 2 }}>
           <TextField
             label='Correo'
