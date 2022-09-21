@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks';
 import { setActiveNote } from '../../store/notes/noteSlice';
 import { startSaveNote } from '../../store/notes/thunks';
-import { ImageGalery } from '../components';
+import { ImageGalery, UploadImagesButton } from '../components';
+import Swal from 'sweetalert2';
 
 const formValid = {
   title: [
@@ -24,7 +25,9 @@ const formValid = {
 
 export const NoteView = () => {
   const dispatch = useDispatch();
-  const { activeNote } = useSelector((state) => state.note);
+  const { activeNote, isSaving, messageSaved } = useSelector(
+    (state) => state.note
+  );
   const {
     body,
     title,
@@ -49,6 +52,12 @@ export const NoteView = () => {
     dispatch(startSaveNote());
   };
 
+  useEffect(() => {
+    if (messageSaved.length > 0) {
+      Swal.fire('Nota actualizada', messageSaved, 'success');
+    }
+  }, [messageSaved]);
+
   return (
     <Grid
       container
@@ -63,7 +72,8 @@ export const NoteView = () => {
         </Typography>
       </Grid>
       <Grid item>
-        <Button sx={{ padding: 2 }} onClick={onSaveNote}>
+        <UploadImagesButton />
+        <Button sx={{ padding: 2 }} onClick={onSaveNote} disabled={isSaving}>
           <SaveOutlined sx={{ fontSize: 30, mr: 1 }} />
           Guardar
         </Button>
@@ -99,7 +109,7 @@ export const NoteView = () => {
           helperText={bodyValid}
         />
       </Grid>
-      <ImageGalery />
+      <ImageGalery images={activeNote.imagesUrls} />
     </Grid>
   );
 };
